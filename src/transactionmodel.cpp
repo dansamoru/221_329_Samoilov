@@ -74,10 +74,11 @@ void TransactionModel::loadTransactionsFromFile(const QString &filePath) {
             transaction.amount = fields[0]; // сумма
             transaction.wallet = fields[1]; // номер кошелька
             transaction.date = fields[2]; // дата
+            transaction.hash = fields[3]; // хеш
 
-            // Вычисляем хеш для транзакции
-            transaction.hash = calculateHash(transaction, prevHash);
-            prevHash = transaction.hash; // обновляем хеш предыдущей транзакции
+            // // Вычисляем хеш для транзакции
+            // transaction.hash = calculateHash(transaction, prevHash);
+            // prevHash = transaction.hash; // обновляем хеш предыдущей транзакции
 
             beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size());
             m_transactions.append(transaction);
