@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include <QRandomGenerator>
 
+
 TransactionModel::TransactionModel(QObject* parent)
     : QAbstractTableModel(parent) {}
 
@@ -56,12 +57,39 @@ void TransactionModel::addTransaction(double amount, const QString& prevHash) {
     endInsertRows();
 }
 
-QString TransactionModel::generateWalletNumber() const {
-    QString wallet;
-    for (int i = 0; i < 6; ++i) {
-        wallet.append(QString::number(QRandomGenerator::global()->bounded(0, 10)));
+void TransactionModel::loadTransactionsFromFile(const QString &filePath) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning("Could not open file for reading");
+        return;
     }
-    return wallet;
+
+    QTextStream in(&file);
+    QString prevHash;
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList fields = line.split(' ', Qt::SkipEmptyParts);
+        if (fields.size() >= 3) {
+            Transaction transaction;
+            transaction.amount = fields[0]; // сумма
+            transaction.wallet = fields[1]; // номер кошелька
+            transaction.date = fields[2]; // дата
+
+            // Вычисляем хеш для транзакции
+            transaction.hash = calculateHash(transaction, prevHash);
+            prevHash = transaction.hash; // обновляем хеш предыдущей транзакции
+
+            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size());
+            m_transactions.append(transaction);
+            endInsertRows();
+        }
+    }
+
+    file.close();
+}
+
+QString TransactionModel::generateWalletNumber() const {
+    return QString::number(QRandomGenerator::global()->bounded(100000, 999999));
 }
 
 QString TransactionModel::calculateHash(const Transaction& transaction, const QString& prevHash) const {

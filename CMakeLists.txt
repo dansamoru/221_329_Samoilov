@@ -17,7 +17,8 @@ add_executable(exam main.cpp
         src/transactionmodel.cpp
         src/transactionmodel.h
         src/mainwindow.cpp
-        src/mainwindow.h)
+        src/mainwindow.h
+        src/mainwindow.cpp)
 target_link_libraries(exam
         Qt::Core
         Qt::Gui

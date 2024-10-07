@@ -3,6 +3,8 @@
 #include <QList>
 #include <QString>
 #include <QCryptographicHash>
+#include <QFile>
+#include <QTextStream>
 
 struct Transaction {
     QString amount;  // сумма с ведущими нулями
@@ -22,6 +24,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     void addTransaction(double amount, const QString& prevHash);
+
+    void loadTransactionsFromFile(const QString &filePath);
 
 private:
     QList<Transaction> m_transactions;

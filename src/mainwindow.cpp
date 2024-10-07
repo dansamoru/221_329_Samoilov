@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_tableView(new QTableView(this)), m_model(new TransactionModel(this)) {
@@ -8,10 +9,9 @@ MainWindow::MainWindow(QWidget* parent)
     setCentralWidget(m_tableView);
     m_tableView->setModel(m_model);
 
-    // Добавление тестовых транзакций
-    m_model->addTransaction(12345.67, "");
-    m_model->addTransaction(890.12, "");
-    m_model->addTransaction(19.25, "");
-    m_model->addTransaction(1166.01, "");
-    m_model->addTransaction(1028.10, "");
+    // Загрузка транзакций из файла
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open Transactions File"), "", tr("Text Files (*.txt)"));
+    if (!filePath.isEmpty()) {
+        m_model->loadTransactionsFromFile(filePath);
+    }
 }
