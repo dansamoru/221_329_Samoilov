@@ -13,7 +13,11 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(exam main.cpp)
+add_executable(exam main.cpp
+        src/transactionmodel.cpp
+        src/transactionmodel.h
+        src/mainwindow.cpp
+        src/mainwindow.h)
 target_link_libraries(exam
         Qt::Core
         Qt::Gui
