@@ -99,5 +99,5 @@ QString TransactionModel::calculateHash(const Transaction& transaction, const QS
 }
 
 QString TransactionModel::formatAmount(double amount) const {
-    return QString("%1").arg(QString::number(amount, 'f', 2), 7, '0');
+    return QString("%1").arg(QString::number(amount, 'f', 0), 7, '0');
 }

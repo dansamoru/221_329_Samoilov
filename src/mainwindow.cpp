@@ -1,4 +1,7 @@
 #include "mainwindow.h"
+#include "addtransactiondialog.h"
+#include <QToolBar>
+#include <QAction>
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -8,6 +11,14 @@ MainWindow::MainWindow(QWidget* parent)
     setMinimumSize(400, 300);
     setCentralWidget(m_tableView);
     m_tableView->setModel(m_model);
+
+    // Добавляем панель инструментов
+    QToolBar *toolbar = addToolBar("Toolbar");
+    QAction *addAction = toolbar->addAction("Добавить транзакцию");
+    connect(addAction, &QAction::triggered, this, [this]() {
+        AddTransactionDialog dialog(m_model, this);
+        dialog.exec();
+    });
 
     // Загрузка транзакций из файла
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open Transactions File"), "", tr("Text Files (*.txt)"));
