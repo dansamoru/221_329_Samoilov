@@ -89,6 +89,22 @@ void TransactionModel::loadTransactionsFromFile(const QString &filePath) {
     file.close();
 }
 
+void TransactionModel::saveTransactionsToFile(const QString &filePath) const {
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning("Could not open file for writing");
+        return;
+    }
+
+    QTextStream out(&file);
+    for (int i = 0; i < m_transactions.size(); ++i) {
+        out << m_transactions[i].amount << " " << m_transactions[i].wallet << " "
+            << m_transactions[i].date << " " << m_transactions[i].hash << "\n";
+    }
+
+    file.close();
+}
+
 QString TransactionModel::generateWalletNumber() const {
     return QString::number(QRandomGenerator::global()->bounded(100000, 999999));
 }

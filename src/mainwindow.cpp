@@ -6,7 +6,6 @@
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_tableView(new QTableView(this)), m_model(new TransactionModel(this)) {
-
     setWindowTitle("Транзакции");
     setMinimumSize(400, 300);
     setCentralWidget(m_tableView);
@@ -18,6 +17,11 @@ MainWindow::MainWindow(QWidget* parent)
     connect(addAction, &QAction::triggered, this, [this]() {
         AddTransactionDialog dialog(m_model, this);
         dialog.exec();
+    });
+    QAction*saveAction = toolbar->addAction("Сохранить транзакции");
+    connect(saveAction, &QAction::triggered, this, [this]() {
+        QString filePath = QFileDialog::getSaveFileName(this, tr("Save Transactions File"), "", tr("Text Files (*.txt)"));
+        m_model->saveTransactionsToFile(filePath);
     });
 
     // Загрузка транзакций из файла

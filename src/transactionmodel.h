@@ -27,6 +27,8 @@ public:
 
     void loadTransactionsFromFile(const QString &filePath);
 
+    void saveTransactionsToFile(const QString &filePath) const;
+
 private:
     QList<Transaction> m_transactions;
     QString generateWalletNumber() const;
